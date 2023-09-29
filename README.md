@@ -15,11 +15,13 @@ You will be prompted for AWS credentials (key and secret), then choice of locati
 Please answer for AWS provisioning, adding your own ssh key, pull-secret and choice of AWS region.
 
 The install script currently modifies the supplied basic `install-config.yaml` by using the two files `install-platform-worker` and `install-platform-master`. These
-two files are used to modify the node sizes for workers and the control plane.
+two files are used to modify the node sizes for workers and the control plane. The install files are all placed in a cluster specific directory `<clustername>-install-dir`.
 
 The cluster will be installed.
 
-After about 30 minutes the cluster will then add the LetsEnrypt certs, using the `acme.sh` toolset.
+After about 30 minutes the cluster will then add the LetsEncrypt certs, using the `acme.sh` toolset.
 
 If CA cert allocation fails it maybe that you need to register with the CA to proceed for example:
 `./acme.sh --register-account -m user@example.com`
+
+And finally when you are finished, use this to destroy the OpenShift cluster `./openshift-install destroy cluster --dir <clustername>-install-dir`
