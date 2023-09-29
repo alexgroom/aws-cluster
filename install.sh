@@ -35,7 +35,7 @@ echo *********** Apply LetsEncrypt certs **********************
 
 cd replace_certs
 ./certs.sh
-cd ../..
+cd ..
 
 echo *********** Wait for cluster to update **********************
 oc get co
