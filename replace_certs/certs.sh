@@ -17,8 +17,6 @@ sleep 2
 
 ./acme.sh --install-cert -d ${RHOCP_API} -d "*.${RHOCP_WILDCARD}" --cert-file cert.pem --key-file key.pem --fullchain-file fullchain.pem --ca-file ca.cer
 
-cd ..
-
 ls -la 
 
 sleep 2
@@ -30,3 +28,5 @@ oc patch proxy/cluster --type=merge --patch='{"spec":{"trustedCA":{"name":"custo
 oc create secret tls le --cert=fullchain.pem --key=key.pem -n openshift-ingress
 
 oc patch ingresscontroller.operator default --type=merge -p '{"spec":{"defaultCertificate": {"name": "le"}}}' -n openshift-ingress-operator
+
+cd ..
