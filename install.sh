@@ -1,7 +1,7 @@
 #!/bin/sh
 if [ -z $1 ]
 then
-  echo "Need to supply a cluster name parameter"
+  echo "install.sh <clustername> [worker replicas count, default=2]"
   exit
 fi
 echo Set up AWS Credentials
@@ -9,12 +9,21 @@ aws configure
 echo Create basic OpenShift install config files
 ./openshift-install create install-config --dir $1-install-dir
 #
-# edit the install config to add the cluster sizing
+# edit the install config to add the cluster machine sizing
 #
 echo Apply worker node config
-yq eval -i '.compute[] |= load("install-platform-worker")' $1-install-dir/install-config.yaml
+yq eval -i '.compute[].platform |= load("install-platform-worker")' $1-install-dir/install-config.yaml
 echo Apply master node config
 yq eval -i '.controlPlane.platform |= load("install-platform-master")' $1-install-dir/install-config.yaml
+
+if [ -z $2 ]
+then
+  REPLICAS=2
+fi
+
+echo "Setting worker replica count to $REPLICAS"
+yq eval -i ".compute[].replicas |= $REPLICAS" $1-install-dir/install-config.yaml
+
 
 echo Take a copy of the install config file
 cp $1-install-dir/install-config.yaml $1-install-dir/install-config-copy
