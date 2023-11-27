@@ -19,11 +19,12 @@ yq eval -i '.controlPlane.platform |= load("install-platform-master")' $1-instal
 if [ -z $2 ]
 then
   REPLICAS=2
+else
+  REPLICAS=$2
 fi
 
 echo "Setting worker replica count to $REPLICAS"
-yq eval -i ".compute[].replicas |= $REPLICAS" $1-install-dir/install-config.yaml
-
+yq eval -i ".compute[].replicas=$REPLICAS" $1-install-dir/install-config.yaml
 
 echo Take a copy of the install config file
 cp $1-install-dir/install-config.yaml $1-install-dir/install-config-copy
