@@ -7,6 +7,7 @@ fi
 echo Set up AWS Credentials
 aws configure
 echo Create basic OpenShift install config files
+mkdir -p $1-install-dir
 ./openshift-install create install-config --dir $1-install-dir
 #
 # edit the install config to add the cluster machine sizing
